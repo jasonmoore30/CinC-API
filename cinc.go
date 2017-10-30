@@ -16,10 +16,9 @@ type Cinc struct {
 // DBConfig will but database connection configuration right here
 //URL, username, password, etc for Joel's MySQL server
 type DBConfig struct {
-	// 	Connection:
-	// 	DBName:
-	// 	DBPass:
-	// 	PrivateRSA:
+	Connection string
+	DBName     string
+	DBPass     string
 }
 
 // NewCinc creates a new Gin router the CinC website, already configured wiht the MySQL connection
@@ -33,9 +32,7 @@ func NewCinc(config *DBConfig) (*Cinc, error) {
 	// The last parameter of each is a function that is defined in another file of the
 	// cinc package. We can break it up into as many independent files as we want.
 
-	// router.GET("/room/:roomid", roomGET)
-	// router.POST("/room-post/:roomid", roomPOST)
-	// router.GET("/stream/:roomid", streamRoom)
+	//router.GET("/api/calendar/events/", getEvents)
 
 	return &Cinc{
 		Environment: "dev",

@@ -10,7 +10,6 @@ func main() {
 	// 	Connection:
 	// 	DBName:
 	// 	DBPass:
-	// 	PrivateRSA:
 	// })
 	// router := cinc.gin
 	// router.Run(":8000")
