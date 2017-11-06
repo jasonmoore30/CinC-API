@@ -45,7 +45,10 @@ func NewCinc() (*Cinc, error) {
 			"message": "Home",
 		})
 	})
+
 	router.GET("/api/calendar/events", getEvents)
+	router.GET("/api/calendar/events/:id", getEvent)
+
 	return &Cinc{
 		Environment: "dev",
 		Gin:         router,
