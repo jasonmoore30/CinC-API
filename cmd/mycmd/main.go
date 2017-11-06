@@ -1,16 +1,24 @@
 package main
 
-// import (
-// 	"github.com/gin-gonic/gin"
-// 	"github.com/jasonmoore30/CinC-API/cinc"
-// )
+import (
+	"fmt"
+
+	cinc "github.com/jasonmoore30/CinC-API"
+)
 
 func main() {
-	// cinc, err = cinc.NewCinc(&cinc.DBConfig{
-	// 	Connection:
-	// 	DBName:
-	// 	DBPass:
-	// })
-	// router := cinc.gin
-	// router.Run(":8000")
+	cincObj, err := cinc.NewCinc()
+	// config := &cinc.DBConfig{
+	// 	Connection: "tcp(156.143.17.176)",
+	// 	DBName:     "jamoore",
+	// 	DBUser:     "jamoore",
+	// 	DBPass:     ".reset.",
+	// }
+	// dsn := config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
+	// models.InitDB(dsn)
+	if err != nil {
+		fmt.Println(err)
+	}
+	router := cincObj.Gin
+	router.Run(":8000")
 }
