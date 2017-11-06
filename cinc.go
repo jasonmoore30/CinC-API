@@ -2,8 +2,7 @@ package cinc
 
 import (
 	gin "github.com/gin-gonic/gin"
-	// import "database/sql"
-	// import _ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" //This is the driver for MySQL and is vital for DB Connectivity
 )
 
 //Cinc is a struct to pass the Gin router to the main package and other important
@@ -18,25 +17,37 @@ type Cinc struct {
 type DBConfig struct {
 	Connection string
 	DBName     string
+	DBUser     string
 	DBPass     string
 }
 
+// Cors ..
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
+		c.Next()
+	}
+}
+
 // NewCinc creates a new Gin router the CinC website, already configured wiht the MySQL connection
-func NewCinc(config *DBConfig) (*Cinc, error) {
+func NewCinc() (*Cinc, error) {
 	gin.SetMode(gin.ReleaseMode)
 
-	router := gin.New()
+	router := gin.Default()
+	router.Use(Cors())
 	//router.Use(rateLimit, gin.Recovery())
 
 	// This is where all of our route endpoints will go.
 	// The last parameter of each is a function that is defined in another file of the
 	// cinc package. We can break it up into as many independent files as we want.
-
-	//router.GET("/api/calendar/events/", getEvents)
-
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Home",
+		})
+	})
+	router.GET("/api/calendar/events", getEvents)
 	return &Cinc{
 		Environment: "dev",
 		Gin:         router,
 	}, nil
-
 }

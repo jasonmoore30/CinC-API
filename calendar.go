@@ -1,30 +1,27 @@
 package cinc
 
 import (
-	"database/sql"
-	"encoding/json"
-
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/jasonmoore30/CinC-API/models"
 )
 
-//rateLimit.... This is an example endpoint.
+// Event ..
+type Event struct {
+	ID          int64  `db:"id" json:"id"`
+	Title       string `db:"title" json:"title"`
+	Description string `db:"description" json:"description"`
+	Date        string `db:"date" json:"date"`
+	Location    string `db:"location" json:"location"`
+	Start       string `db:"start_time" json:"start_time"`
+	End         string `db:"end_time" json:"end_time"`
+}
+
+// getEvents is our handler func to write a nice, accurate response or error message
 func getEvents(c *gin.Context) {
 
-	// This opens the DB connection, using parameters from the cinc DBConfig object
-	db, err := sql.Open("mysql", "astaxie:astaxie@/test?charset=utf8")
+	events, err := models.GetEvents()
 	checkErr(err)
-
-	// insert
-	stmt, err := db.Prepare("SELECT * FROM ? WHERE id = ?")
-	checkErr(err)
-
-	res, err := stmt.Exec("ExampleTable", "4")
-	checkErr(err)
-	resJSON, err := json.Marshal(res)
-	checkErr(err)
-	c.Abort()
-	c.JSON(200, resJSON)
+	c.JSON(200, events)
 }
 
 func checkErr(err error) {
