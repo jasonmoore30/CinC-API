@@ -7,7 +7,7 @@ import (
 
 //Event ..
 type Event struct {
-	ID          int64  `db:"id" json:"id"`
+	ID          int    `db:"id" json:"id"`
 	Title       string `db:"title" json:"title"`
 	Description string `db:"description" json:"description"`
 	Date        string `db:"date" json:"date"`
@@ -18,10 +18,10 @@ type Event struct {
 
 //GetEvents returns an array of all the event objects in the database
 func GetEvents() ([]*Event, error) {
-	err := db.Ping()
-	if err != nil {
-		return nil, err
-	}
+	// err := db.Ping()
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	stmt, err := db.Prepare("SELECT * FROM Events")
 	if err != nil {
@@ -126,7 +126,7 @@ func UpdateEvent(myEvent *Event, id string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Row updated: ", rowNum)
+	fmt.Println("Event updated: ", rowNum)
 	return nil
 }
 

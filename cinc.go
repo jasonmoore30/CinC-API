@@ -56,6 +56,11 @@ func NewCinc() (*Cinc, error) {
 	router.PUT("/api/calendar/event/update/:id", updateEvent)
 
 	//Courses CRUD
+	router.GET("/api/courses/", getCourses)
+	router.GET("/api/courses/:id", getCourse)
+	router.POST("/api/courses/new", newCourse)
+	router.DELETE("/api/courses/delete/:id", deleteCourse)
+	router.PUT("/api/courses/update/:id", updateCourse)
 
 	//Experiences CRUD
 
