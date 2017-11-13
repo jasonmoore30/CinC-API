@@ -2,6 +2,7 @@ package cinc
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jasonmoore30/CinC-API/models"
@@ -28,8 +29,45 @@ func getEvents(c *gin.Context) {
 func getEvent(c *gin.Context) {
 	id := c.Params.ByName("id")
 	event, err := models.GetEvent(id)
-	checkErr(err)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, err)
+		return
+	}
 	c.JSON(200, event)
+}
+
+//for now, events go directly into the events table
+// TODO: direct post methods to "holding tables" where they can await approval before being sent
+// into the actual main data tables
+func newEvent(c *gin.Context) {
+	var myEvent = new(models.Event)
+
+	//if I understand the documentation correctly, this is all you have to do to put json data into struct form.
+	err := c.Bind(myEvent)
+	checkErr(err)
+
+	err = models.AddEvent(myEvent)
+	checkErr(err)
+}
+
+func deleteEvent(c *gin.Context) {
+	id := c.Params.ByName("id")
+	err := models.DeleteEvent(id)
+	checkErr(err)
+	c.AbortWithStatus(http.StatusOK)
+}
+
+func updateEvent(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var myEvent = new(models.Event)
+
+	err := c.Bind(myEvent)
+	checkErr(err)
+
+	err = models.UpdateEvent(myEvent, id)
+	checkErr(err)
+
+	c.AbortWithStatus(http.StatusOK)
 }
 
 func checkErr(err error) {
