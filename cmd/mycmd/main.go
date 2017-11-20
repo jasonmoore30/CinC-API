@@ -11,9 +11,9 @@ func main() {
 	cincObj, err := cinc.NewCinc()
 	config := &cinc.DBConfig{
 		Connection: "tcp(156.143.17.176)",
-		DBName:     "jamoore",
-		DBUser:     "jamoore",
-		DBPass:     ".reset.",
+		DBName:     "jcovington",
+		DBUser:     "jcovington",
+		DBPass:     "Z48tuaOs",
 	}
 	dsn := config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
 	models.InitDB(dsn)
