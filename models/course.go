@@ -7,13 +7,13 @@ import (
 
 //Course ..
 type Course struct {
-	ID          int      `json:"id"`
-	Title       string   `json:"title"`
-	Department	string   `json:"dept"`
-	Department2 string	 `json:"dept2"`
-	Description string   `json:"descrip"`
-	Faculty  	string   `json:"faculty"`
-	Faculty2 	string	 `json:"faculty2"`
+	ID              int    `json:"id"`
+	Title           string `json:"title"`
+	Department      string `json:"dept"`
+	Department2     string `json:"dept2"`
+	Description     string `json:"descrip"`
+	Faculty         string `json:"faculty"`
+	Faculty2        string `json:"faculty2"`
 	CincDescription string `json:"cincComp"`
 }
 
@@ -32,7 +32,7 @@ func GetCourses() ([]*Course, error) {
 	courses := make([]*Course, 0)
 	for rows.Next() {
 		course := new(Course)
-		err := rows.Scan(&course.ID, &course.Title, &course.Department, &course.Department2 &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
+		err := rows.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
 		if err != nil {
 			return nil, err
 		}
@@ -44,13 +44,13 @@ func GetCourses() ([]*Course, error) {
 
 //GetCourse ..
 func GetCourse(id string) (*Course, error) {
-	row, err := db.Query("SELECT * FROM furmcourse WHERE id=?", id)
+	row, err := db.Query("SELECT * FROM furmcourse WHERE cID=?", id)
 	if err != nil {
 		return nil, err
 	}
 	var course = new(Course)
 	for row.Next() {
-		err = row.Scan(&course.ID, &course.Title, &course.Department, &course.Department2 &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
+		err = row.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
 		if err != nil {
 			return nil, err
 		}
@@ -88,7 +88,7 @@ func AddCourse(myCourse *Course) error {
 
 //DeleteCourse ..
 func DeleteCourse(id string) error {
-	stmt, err := db.Prepare("DELETE FROM furmcourse WHERE id=?")
+	stmt, err := db.Prepare("DELETE FROM furmcourse WHERE cID=?")
 	if err != nil {
 		return err
 	}
@@ -105,7 +105,7 @@ func UpdateCourse(myCourse *Course, id string) error {
 	if err != nil {
 		return err
 	}
-	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2,myCourse.CincDescription)
+	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2, myCourse.CincDescription)
 	if err != nil {
 		return err
 	}
@@ -116,8 +116,6 @@ func UpdateCourse(myCourse *Course, id string) error {
 	fmt.Println("Course updated: ", rowNum)
 	return nil
 }
-
-
 
 //validation function for a Course struct
 

@@ -9,11 +9,13 @@ import (
 type Event struct {
 	ID          int    `db:"id" json:"id"`
 	Title       string `db:"title" json:"title"`
+	CreatorID   int    `db:"creator" json:"creatorid"`
 	Description string `db:"description" json:"description"`
-	Date        string `db:"date" json:"date"`
-	Location    string `db:"location" json:"location"`
-	Start       string `db:"start_time" json:"start_time"`
-	End         string `db:"end_time" json:"end_time"`
+	//Date        string `db:"date" json:"date"`
+	Location  string `db:"location" json:"location"`
+	Start     string `db:"start_time" json:"start_time"`
+	End       string `db:"end_time" json:"end_time"`
+	CreatedAt string `db:"created_at" json:"created_at"`
 }
 
 //GetEvents returns an array of all the event objects in the database
@@ -23,7 +25,7 @@ func GetEvents() ([]*Event, error) {
 	// 	return nil, err
 	// }
 
-	stmt, err := db.Prepare("SELECT * FROM Events")
+	stmt, err := db.Prepare("SELECT * FROM furmcal")
 	if err != nil {
 		return nil, err
 	}
@@ -36,10 +38,11 @@ func GetEvents() ([]*Event, error) {
 	events := make([]*Event, 0)
 	for rows.Next() {
 		event := new(Event)
-		err := rows.Scan(&event.ID, &event.Title, &event.Description, &event.Date, &event.Location, &event.Start, &event.End)
+		err := rows.Scan(&event.ID, &event.CreatorID, &event.Start, &event.End, &event.CreatedAt, &event.Title, &event.Description, &event.Location)
 		if err != nil {
 			return nil, err
 		}
+
 		events = append(events, event)
 	}
 	fmt.Println("Returning events!")
@@ -48,13 +51,14 @@ func GetEvents() ([]*Event, error) {
 
 //GetEvent returns the event with the unique identifier given as an argument
 func GetEvent(id string) (*Event, error) {
-	row, err := db.Query("SELECT * FROM Events WHERE id=?", id)
+	row, err := db.Query("SELECT * FROM furmcal WHERE evID=?", id)
 	if err != nil {
 		return nil, err
 	}
 	var event = new(Event)
 	for row.Next() {
-		err = row.Scan(&event.ID, &event.Title, &event.Description, &event.Date, &event.Location, &event.Start, &event.End)
+		//err = row.Scan(&event.ID, &event.Title, &event.Description, &event.Date, &event.Location, &event.Start, &event.End)
+		err = row.Scan(&event.ID, &event.CreatorID, &event.Start, &event.End, &event.CreatedAt, &event.Title, &event.Description, &event.Location)
 		if err != nil {
 			return nil, err
 		}
@@ -69,7 +73,7 @@ func GetEvent(id string) (*Event, error) {
 //AddEvent inserts a new event into the Events table
 func AddEvent(myEvent *Event) error {
 
-	stmt, err := db.Prepare("INSERT INTO Events (title, description, date, location, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO Events (evTitle, evDesc, evLoc, evStart, evEnd) VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -85,7 +89,7 @@ func AddEvent(myEvent *Event) error {
 	}
 
 	//We may need to convert the start and end time strings into
-	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Date, myEvent.Location, myEvent.Start, myEvent.End)
+	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Location, myEvent.Start, myEvent.End)
 	if err != nil {
 		return err
 	}
@@ -99,7 +103,7 @@ func AddEvent(myEvent *Event) error {
 
 //DeleteEvent ..
 func DeleteEvent(id string) error {
-	stmt, err := db.Prepare("DELETE FROM Events WHERE id=?")
+	stmt, err := db.Prepare("DELETE FROM furmcal WHERE evID=?")
 	if err != nil {
 		return err
 	}
@@ -114,11 +118,11 @@ func DeleteEvent(id string) error {
 //UpdateEvent ..
 func UpdateEvent(myEvent *Event, id string) error {
 
-	stmt, err := db.Prepare("UPDATE Events SET (title=?, description=?, date=?, location=?, start_time=?, end_time=?) WHERE id=?")
+	stmt, err := db.Prepare("UPDATE furmcal SET (evTitle=?, evDesc=?, evLoc=?, evStart=?, evEnd=?) WHERE evID=?")
 	if err != nil {
 		return err
 	}
-	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Date, myEvent.Location, myEvent.Start, myEvent.End, id)
+	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Location, myEvent.Start, myEvent.End, id)
 	if err != nil {
 		return err
 	}
