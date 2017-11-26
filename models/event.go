@@ -73,7 +73,7 @@ func GetEvent(id string) (*Event, error) {
 //AddEvent inserts a new event into the Events table
 func AddEvent(myEvent *Event) error {
 
-	stmt, err := db.Prepare("INSERT INTO Events (evTitle, evDesc, evLoc, evStart, evEnd) VALUES (?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmcal (evTitle, evDesc, evLoc, evStart, evEnd) VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
