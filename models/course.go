@@ -7,17 +7,19 @@ import (
 
 //Course ..
 type Course struct {
-	ID          int      `json:"id"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Professors  []string `json:"professors"`
-	IsOffered   string   `json:"isOffered"`
-	Term        string   `json:"term"`
+	ID              int    `json:"id"`
+	Title           string `json:"title"`
+	Department      string `json:"dept"`
+	Department2     string `json:"dept2"`
+	Description     string `json:"descrip"`
+	Faculty         string `json:"faculty"`
+	Faculty2        string `json:"faculty2"`
+	CincDescription string `json:"cincComp"`
 }
 
 //GetCourses ..
 func GetCourses() ([]*Course, error) {
-	stmt, err := db.Prepare("SELECT * FROM Courses")
+	stmt, err := db.Prepare("SELECT * FROM furmcourse")
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +32,7 @@ func GetCourses() ([]*Course, error) {
 	courses := make([]*Course, 0)
 	for rows.Next() {
 		course := new(Course)
-		err := rows.Scan(&course.ID, &course.Title, &course.Description, &course.Professors, &course.IsOffered, &course.Term)
+		err := rows.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
 		if err != nil {
 			return nil, err
 		}
@@ -42,13 +44,13 @@ func GetCourses() ([]*Course, error) {
 
 //GetCourse ..
 func GetCourse(id string) (*Course, error) {
-	row, err := db.Query("SELECT * FROM Courses WHERE id=?", id)
+	row, err := db.Query("SELECT * FROM furmcourse WHERE cID=?", id)
 	if err != nil {
 		return nil, err
 	}
 	var course = new(Course)
 	for row.Next() {
-		err = row.Scan(&course.ID, &course.Title, &course.Description, &course.Professors, &course.IsOffered, &course.Term)
+		err = row.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +65,7 @@ func GetCourse(id string) (*Course, error) {
 //AddCourse ..
 func AddCourse(myCourse *Course) error {
 
-	stmt, err := db.Prepare("INSERT INTO Courses (title, description, professors, isOffered, term) VALUES (?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmcourse (title, dept, dept2, description, faculty, faculty2, cinc_description) VALUES (?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -71,7 +73,7 @@ func AddCourse(myCourse *Course) error {
 	if !ok {
 		//return custom error message about validity of submitted struct
 	}
-	result, err := stmt.Exec(myCourse.Title, myCourse.Description, myCourse.Professors, myCourse.IsOffered, myCourse.Term)
+	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2, myCourse.CincDescription)
 	if err != nil {
 		return err
 	}
@@ -79,14 +81,14 @@ func AddCourse(myCourse *Course) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("New event created with id: %d", id)
+	fmt.Printf("New course created with id: %d", id)
 	return nil
 
 }
 
 //DeleteCourse ..
 func DeleteCourse(id string) error {
-	stmt, err := db.Prepare("DELETE FROM Courses WHERE id=?")
+	stmt, err := db.Prepare("DELETE FROM furmcourse WHERE cID=?")
 	if err != nil {
 		return err
 	}
@@ -99,11 +101,11 @@ func DeleteCourse(id string) error {
 
 //UpdateCourse ..
 func UpdateCourse(myCourse *Course, id string) error {
-	stmt, err := db.Prepare("UPDATE Courses SET (title=?, description=?, professors=?, isOffered=?, term=?)")
+	stmt, err := db.Prepare("UPDATE furmcourse SET (title=?, dept=?, dept2=?, description=?, faculty=?, faculty2=?, cinc_description=?)")
 	if err != nil {
 		return err
 	}
-	result, err := stmt.Exec(myCourse.Title, myCourse.Description, myCourse.Professors, myCourse.IsOffered, myCourse.Term, id)
+	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2, myCourse.CincDescription)
 	if err != nil {
 		return err
 	}
@@ -115,7 +117,8 @@ func UpdateCourse(myCourse *Course, id string) error {
 	return nil
 }
 
-//validation function for a course to add
+//validation function for a Course struct
+
 func (course *Course) validate() bool {
 
 	return true
