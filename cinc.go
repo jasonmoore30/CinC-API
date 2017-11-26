@@ -64,9 +64,18 @@ func NewCinc() (*Cinc, error) {
 
 	//Experiences CRUD
 
-	//Blog CRUD
+	router.GET("/api/experiences", getExperiences)
+	router.GET("/api/experiences/:id", getExperience)
+	router.POST("/api/experiences/new", newExperience)
+	router.DELETE("/api/experiences/delete/:id", deleteExperience)
+	router.PUT("/api/experiences/update/:id", updateExperience)
 
-	//Courses CRUD
+	//Blog CRUD
+	router.GET("/api/blog/posts", getPosts)
+	router.GET("/api/blog/posts/:id", getPost)
+	router.POST("/api/blog/posts/new", newPost)
+	router.DELETE("/api/blog/posts/delete/:id", deletePost)
+	router.PUT("/api/blog/posts/update/:id", updatePost)
 
 	return &Cinc{
 		Environment: "dev",
