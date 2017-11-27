@@ -40,11 +40,11 @@ func NewCinc() (*Cinc, error) {
 	// This is where all of our route endpoints will go.
 	// The last parameter of each is a function that is defined in another file of the
 	// cinc package. We can break it up into as many independent files as we want.
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Home",
-		})
-	})
+	// router.GET("/", func(c *gin.Context) {
+	// 	c.JSON(200, gin.H{
+	// 		"message": "Home",
+	// 	})
+	// })
 
 	//Will add search/query string endpoints for each at a later time
 
@@ -63,7 +63,6 @@ func NewCinc() (*Cinc, error) {
 	router.PUT("/api/courses/update/:id", updateCourse)
 
 	//Experiences CRUD
-
 	router.GET("/api/experiences", getExperiences)
 	router.GET("/api/experiences/:id", getExperience)
 	router.POST("/api/experiences/new", newExperience)

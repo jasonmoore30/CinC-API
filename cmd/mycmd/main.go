@@ -22,4 +22,5 @@ func main() {
 	}
 	router := cincObj.Gin
 	router.Run(":8000")
+	fmt.Printf("Now running on port:8000")
 }
