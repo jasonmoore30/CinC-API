@@ -62,7 +62,7 @@ func GetPost(id string) (*Post, error) {
 //AddPost ..
 func AddPost(myPost *Post) error {
 
-	stmt, err := db.Prepare("INSERT INTO furmpost (title, body, postDT, usernum) VALUES (?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmpost (title, body, usernum) VALUES (?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -70,7 +70,10 @@ func AddPost(myPost *Post) error {
 	if !ok {
 		//return error message about validity
 	}
-	result, err := stmt.Exec(myPost.Title, myPost.Body, myPost.PostDate, myPost.UserNum)
+	//result, err := stmt.Exec(myPost.Title, myPost.Body, myPost.PostDate, myPost.UserNum)
+	//Usernum? Pretty sure we decided on a stateless site, we would need a screenname/email field
+	//instead of usernum
+	result, err := stmt.Exec(myPost.Title, myPost.Body, myPost.UserNum)
 	if err != nil {
 		return err
 	}

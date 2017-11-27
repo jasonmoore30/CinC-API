@@ -139,4 +139,4 @@ func UpdateEvent(myEvent *Event, id string) error {
 func (*Event) validate() bool {
 
 	return true
-}
+
