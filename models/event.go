@@ -140,3 +140,4 @@ func (*Event) validate() bool {
 
 	return true
 
+}
