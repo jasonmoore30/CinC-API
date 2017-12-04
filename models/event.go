@@ -25,7 +25,7 @@ func GetEvents() ([]*Event, error) {
 	// 	return nil, err
 	// }
 
-	stmt, err := db.Prepare("SELECT * FROM furmcal,furminf")
+	stmt, err := db.Prepare("SELECT furmcal.evStart, furmcal.evEnd, furmcal.createdAt, furmcal.evTitle, furmcal.evDesc, furmcal.evLoc, furminf.fName, furminf.lName, furminf.uPhone, furminf.uEmail FROM furmcal INNER JOIN furminf ON furmcal.usernum=furminf.usernum")
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func GetEvents() ([]*Event, error) {
 
 //GetEvent returns the event with the unique identifier given as an argument
 func GetEvent(id string) (*Event, error) {
-	row, err := db.Query("SELECT * FROM furmcal WHERE evID=?", id)
+	row, err := db.Query("SELECT furmcal.evStart, furmcal.evEnd, furmcal.createdAt, furmcal.evTitle, furmcal.evDesc, furmcal.evLoc, furminf.fName, furminf.lName, furminf.uPhone, furminf.uEmail FROM furmcal WHERE evID=? INNER JOIN furminf ON furmcal.usernum=furminf.usernum", id)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func DeleteEvent(id string) error {
 //UpdateEvent ..
 func UpdateEvent(myEvent *Event, id string) error {
 
-	stmt, err := db.Prepare("UPDATE furmcal SET evTitle=?, evDesc=?, evLoc=?, evStart=?, evEnd=? WHERE evID=?")
+	stmt, err := db.Prepare("UPDATE furmcal SET (evTitle=?, evDesc=?, evLoc=?, evStart=?, evEnd=?) WHERE evID=?")
 	if err != nil {
 		return err
 	}
