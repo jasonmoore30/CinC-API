@@ -43,7 +43,7 @@ func main() {
 		// 	DBPass:     "clh3e6aww7a0600o",
 		// }
 		//dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
-		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
+		dsn = "mysql://lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
 	}
 
 	//dsn := config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
