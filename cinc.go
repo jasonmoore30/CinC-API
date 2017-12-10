@@ -1,6 +1,8 @@
 package cinc
 
 import (
+	"crypto/rsa"
+
 	gin "github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql" //This is the driver for MySQL and is vital for DB Connectivity
 )
@@ -10,6 +12,7 @@ import (
 type Cinc struct {
 	Environment string
 	Gin         *gin.Engine
+	privateKey  *rsa.PrivateKey
 }
 
 // DBConfig will but database connection configuration right here
@@ -35,18 +38,9 @@ func NewCinc() (*Cinc, error) {
 
 	router := gin.Default()
 	router.Use(Cors())
-	//router.Use(rateLimit, gin.Recovery())
 
-	// This is where all of our route endpoints will go.
-	// The last parameter of each is a function that is defined in another file of the
-	// cinc package. We can break it up into as many independent files as we want.
-	// router.GET("/", func(c *gin.Context) {
-	// 	c.JSON(200, gin.H{
-	// 		"message": "Home",
-	// 	})
-	// })
+	auth := router.Group("/", AuthToken)
 
-	//Will add search/query string endpoints for each at a later time
 	router.GET("/", func(c *gin.Context) {
 		c.String(200, "Hello World!")
 	})
@@ -54,22 +48,28 @@ func NewCinc() (*Cinc, error) {
 	router.GET("/api/calendar/events", getEvents)
 	router.GET("/api/calendar/events/:id", getEvent)
 	router.POST("/api/calendar/events/new", newEvent)
-	router.DELETE("/api/calendar/events/delete/:id", deleteEvent)
-	router.PUT("/api/calendar/events/update/:id", updateEvent)
+	// router.DELETE("/api/calendar/events/delete/:id", deleteEvent)
+	// router.PUT("/api/calendar/events/update/:id", updateEvent)
+	auth.DELETE("/api/calendar/events/delete/:id", deleteEvent)
+	auth.PUT("/api/calendar/events/update/:id", updateEvent)
 
 	//Courses CRUD
 	router.GET("/api/courses", getCourses)
 	router.GET("/api/courses/:id", getCourse)
 	router.POST("/api/courses/new", newCourse)
-	router.DELETE("/api/courses/delete/:id", deleteCourse)
-	router.PUT("/api/courses/update/:id", updateCourse)
+	// router.DELETE("/api/courses/delete/:id", deleteCourse)
+	// router.PUT("/api/courses/update/:id", updateCourse)
+	auth.DELETE("/api/courses/delete/:id", deleteCourse)
+	auth.PUT("/api/courses/update/:id", updateCourse)
 
 	//Experiences CRUD
 	router.GET("/api/experiences", getExperiences)
 	router.GET("/api/experiences/:id", getExperience)
 	router.POST("/api/experiences/new", newExperience)
-	router.DELETE("/api/experiences/delete/:id", deleteExperience)
-	router.PUT("/api/experiences/update/:id", updateExperience)
+	// router.DELETE("/api/experiences/delete/:id", deleteExperience)
+	// router.PUT("/api/experiences/update/:id", updateExperience)
+	auth.DELETE("/api/experiences/delete/:id", deleteExperience)
+	auth.PUT("/api/experiences/update/:id", updateExperience)
 
 	//Blog CRUD
 	router.GET("/api/blog/posts", getPosts)
@@ -77,9 +77,29 @@ func NewCinc() (*Cinc, error) {
 	router.POST("/api/blog/posts/new", newPost)
 	router.DELETE("/api/blog/posts/delete/:id", deletePost)
 	router.PUT("/api/blog/posts/update/:id", updatePost)
+	auth.DELETE("/api/blog/posts/delete/:id", deletePost)
+	auth.PUT("/api/blog/posts/update/:id", updatePost)
+
+	//Authentication
+
+	router.GET("/api/public_key", publicKey)
+	router.POST("/api/authenticate", authUser)
+
+	//only a current admin can add another administrator
+	auth.POST("/api/register", registerUser)
+
+	//Here is where we attach the private key to our object
+	//we will read  the private key from S3 storage or generate one and write it to there
+
+	//Other places that need to deal with this file:
+	//Func GenerateUserToken
+	//Func GetPublicPem
+
+	//IF we dont have an RSA, make one
 
 	return &Cinc{
 		Environment: "dev",
 		Gin:         router,
+		//PrivateKey:  key,
 	}, nil
 }
