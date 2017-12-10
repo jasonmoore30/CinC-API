@@ -47,7 +47,9 @@ func NewCinc() (*Cinc, error) {
 	// })
 
 	//Will add search/query string endpoints for each at a later time
-
+	router.GET("/", func(c *gin.Context) {
+		c.String(200, "Hello World!")
+	})
 	//Events CRUD: Ready for Test
 	router.GET("/api/calendar/events", getEvents)
 	router.GET("/api/calendar/events/:id", getEvent)
