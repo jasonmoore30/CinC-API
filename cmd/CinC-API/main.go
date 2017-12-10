@@ -36,12 +36,12 @@ func main() {
 		}
 		dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
 	} else {
-		config := &cinc.DBConfig{
-			Connection: "erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-			DBName:     "ekrazwe0spgirfvb",
-			DBUser:     "lg4zljacvp2tkm4x",
-			DBPass:     "clh3e6aww7a0600o",
-		}
+		// config := &cinc.DBConfig{
+		// 	Connection: "erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+		// 	DBName:     "ekrazwe0spgirfvb",
+		// 	DBUser:     "lg4zljacvp2tkm4x",
+		// 	DBPass:     "clh3e6aww7a0600o",
+		// }
 		//dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
 		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
 	}
