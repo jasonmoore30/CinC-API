@@ -100,7 +100,7 @@ func DeletePost(id string) error {
 
 //UpdatePost ..
 func UpdatePost(myPost *Post, id string) error {
-	stmt, err := db.Prepare("UPDATE furmpost SET (title=?, body=? WHERE entryID=?")
+	stmt, err := db.Prepare("UPDATE furmpost SET title=?, body=? WHERE entryID=?")
 
 	result, err := stmt.Exec(myPost.Title, myPost.Body)
 	if err != nil {
