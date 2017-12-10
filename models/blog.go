@@ -10,7 +10,7 @@ type Post struct {
 	Title    string `json:"title"`
 	Body     string `json:"body"`
 	PostDate string `json:"post_date"`
-	UserNum  int    `json:"user_num"`
+	UserNum  int    `json:"usernum"`
 	ID       int    `json:"id"`
 }
 
@@ -100,9 +100,9 @@ func DeletePost(id string) error {
 
 //UpdatePost ..
 func UpdatePost(myPost *Post, id string) error {
-	stmt, err := db.Prepare("UPDATE furmpost SET (title=?, body=? WHERE entryID=?")
+	stmt, err := db.Prepare("UPDATE furmpost SET title=?, body=? WHERE entryID=?")
 
-	result, err := stmt.Exec(myPost.Title, myPost.Body)
+	result, err := stmt.Exec(myPost.Title, myPost.Body, id)
 	if err != nil {
 		return err
 	}

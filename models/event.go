@@ -73,7 +73,7 @@ func GetEvent(id string) (*Event, error) {
 //AddEvent inserts a new event into the Events table
 func AddEvent(myEvent *Event) error {
 
-	stmt, err := db.Prepare("INSERT INTO furmcal (evTitle, evDesc, evLoc, evStart, evEnd) VALUES (?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmcal (evTitle, evDesc, evLoc, evStart, evEnd, usernum) VALUES (?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func AddEvent(myEvent *Event) error {
 	}
 
 	//We may need to convert the start and end time strings into
-	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Location, myEvent.Start, myEvent.End)
+	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Location, myEvent.Start, myEvent.End, 2)
 	if err != nil {
 		return err
 	}
@@ -118,7 +118,7 @@ func DeleteEvent(id string) error {
 //UpdateEvent ..
 func UpdateEvent(myEvent *Event, id string) error {
 
-	stmt, err := db.Prepare("UPDATE furmcal SET (evTitle=?, evDesc=?, evLoc=?, evStart=?, evEnd=?) WHERE evID=?")
+	stmt, err := db.Prepare("UPDATE furmcal SET evTitle=?, evDesc=?, evLoc=?, evStart=?, evEnd=? WHERE evID=?")
 	if err != nil {
 		return err
 	}
