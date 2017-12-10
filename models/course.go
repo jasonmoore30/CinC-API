@@ -101,11 +101,11 @@ func DeleteCourse(id string) error {
 
 //UpdateCourse ..
 func UpdateCourse(myCourse *Course, id string) error {
-	stmt, err := db.Prepare("UPDATE furmcourse SET (title=?, dept=?, dept2=?, description=?, faculty=?, faculty2=?, cinc_description=?)")
+	stmt, err := db.Prepare("UPDATE furmcourse SET title=?, dept=?, dept2=?, description=?, faculty=?, faculty2=?, cinc_description=? WHERE cID=?")
 	if err != nil {
 		return err
 	}
-	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2, myCourse.CincDescription)
+	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2, myCourse.CincDescription, id)
 	if err != nil {
 		return err
 	}

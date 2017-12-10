@@ -98,7 +98,7 @@ func DeleteExperience(id string) error {
 //UpdateExperience ..
 func UpdateExperience(myExperience *Experience, id string) error {
 
-	stmt, err := db.Prepare("UPDATE furmexp SET (expType=?, expPost=?, expImg=? WHERE expID=?")
+	stmt, err := db.Prepare("UPDATE furmexp SET expType=?, expPost=?, expImg=? WHERE expID=?")
 	if err != nil {
 		return err
 	}
