@@ -41,6 +41,7 @@ func main() {
 			DBPass:     "Z48tuaOs",
 		}
 		dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
+		//dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@tcp(erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com)/ekrazwe0spgirfvb"
 	} else {
 		// config := &cinc.DBConfig{
 		// 	Connection: "erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
@@ -49,7 +50,7 @@ func main() {
 		// 	DBPass:     "clh3e6aww7a0600o",
 		// }
 		//dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
-		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/ekrazwe0spgirfvb"
+		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@tcp(erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com)/ekrazwe0spgirfvb"
 		dsn2 = "mysql://lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
 	}
 
@@ -64,11 +65,11 @@ func main() {
 		}
 	}
 
-	if err != nil {
-		fmt.Println(err)
-		fmt.Println("Exiting...")
-		return
-	}
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	fmt.Println("Exiting...")
+	// 	return
+	// }
 	router := cincObj.Gin
 	router.Run(":" + port)
 	fmt.Printf("Now running on port: " + port)
