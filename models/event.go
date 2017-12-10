@@ -25,7 +25,7 @@ func GetEvents() ([]*Event, error) {
 	// 	return nil, err
 	// }
 
-	stmt, err := db.Prepare("SELECT furmcal.evStart, furmcal.evEnd, furmcal.createdAt, furmcal.evTitle, furmcal.evDesc, furmcal.evLoc, furminf.fName, furminf.lName, furminf.uPhone, furminf.uEmail FROM furmcal INNER JOIN furminf ON furmcal.usernum=furminf.usernum")
+	stmt, err := db.Prepare("SELECT evStart, evEnd, createdAt, evTitle, evDesc, evLoc FROM furmcal")
 	if err != nil {
 		return nil, err
 	}
