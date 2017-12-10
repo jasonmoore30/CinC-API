@@ -1,5 +1,10 @@
 {
 	"comment": "",
+	"heroku": {
+		"install": [
+			"./cmd/..."
+		]
+	},
 	"ignore": "test",
 	"package": [
 		{
@@ -45,6 +50,12 @@
 			"revisionTime": "2017-10-21T04:39:52Z"
 		},
 		{
+			"checksumSHA1": "0cdNscA7+z4+lKF5usZYz3it/04=",
+			"path": "github.com/joho/godotenv",
+			"revision": "6d367c18edf6ca7fd004efd6863e4c5728fa858e",
+			"revisionTime": "2017-11-10T01:03:15Z"
+		},
+		{
 			"checksumSHA1": "y/A5iuvwjytQE2CqVuphQRXR2nI=",
 			"path": "github.com/mattn/go-isatty",
 			"revision": "a5cdd64afdee435007ee3e9f6ed4684af949d568",
@@ -69,8 +80,5 @@
 			"revisionTime": "2017-08-12T16:00:11Z"
 		}
 	],
-	"rootPath": "github.com/jasonmoore30/CinC-API",
-	"heroku": {
-		"install": ["./cmd/..."]
-	}
+	"rootPath": "github.com/jasonmoore30/CinC-API"
 }
