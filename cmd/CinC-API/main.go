@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+
+	"github.com/joho/godotenv"
 
 	cinc "github.com/jasonmoore30/CinC-API"
 	"github.com/jasonmoore30/CinC-API/models"
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -16,18 +18,21 @@ func main() {
 		return
 	}
 
-	var dev bool
-	dev = true
-	err = godotenv.Load()
-	if err != nil {
-		log.Println("Error loading .env file")
-		dev = false
-	}
+	//var dev bool
+	//dev = true
+	//err = godotenv.Load()
+	_ = godotenv.Load(".env")
+	// if err != nil {
+	// 	log.Println("Error loading .env file")
+
+	//}
 
 	//This would be the proper way to check, but we are going to use whatever works
-	//env := os.Getenv("ENVIRONMENT")
+	env := os.Getenv("ENVIRONMENT")
+	port := os.Getenv("PORT")
+	log.Println(port)
 	var dsn string
-	if dev {
+	if env == "dev" {
 		config := &cinc.DBConfig{
 			Connection: "tcp(156.143.17.176)",
 			DBName:     "jcovington",
@@ -43,7 +48,7 @@ func main() {
 		// 	DBPass:     "clh3e6aww7a0600o",
 		// }
 		//dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
-		dsn = "mysql://lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
+		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/ekrazwe0spgirfvb"
 	}
 
 	//dsn := config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName

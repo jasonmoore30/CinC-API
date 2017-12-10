@@ -3,6 +3,8 @@ package models
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/go-sql-driver/mysql" //Need this blank import
 )
 
 var db *sql.DB
