@@ -51,7 +51,7 @@ func GetEvents() ([]*Event, error) {
 
 //GetEvent returns the event with the unique identifier given as an argument
 func GetEvent(id string) (*Event, error) {
-	row, err := db.Query("SELECT furmcal.evStart, furmcal.evEnd, furmcal.createdAt, furmcal.evTitle, furmcal.evDesc, furmcal.evLoc, furminf.fName, furminf.lName, furminf.uPhone, furminf.uEmail FROM furmcal WHERE evID=? INNER JOIN furminf ON furmcal.usernum=furminf.usernum", id)
+	row, err := db.Query("SELECT evStart, evEnd, createdAt, evTitle, evDesc, evLoc FROM furmcal WHERE evID=?", id)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func GetEvent(id string) (*Event, error) {
 //AddEvent inserts a new event into the Events table
 func AddEvent(myEvent *Event) error {
 
-	stmt, err := db.Prepare("INSERT INTO furmcal (usernum, evTitle, evDesc, evLoc, evStart, evEnd) VALUES (?, ?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmcal (evTitle, evDesc, evLoc, evStart, evEnd) VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
