@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	"os"
-
 	cinc "github.com/jasonmoore30/CinC-API"
 	"github.com/jasonmoore30/CinC-API/models"
 	"github.com/joho/godotenv"
@@ -18,14 +16,18 @@ func main() {
 		return
 	}
 
+	var dev bool
+	dev = true
 	err = godotenv.Load()
 	if err != nil {
 		log.Println("Error loading .env file")
+		dev = false
 	}
 
-	env := os.Getenv("ENVIRONMENT")
+	//This would be the proper way to check, but we are going to use whatever works
+	//env := os.Getenv("ENVIRONMENT")
 	var dsn string
-	if env == "dev" {
+	if dev {
 		config := &cinc.DBConfig{
 			Connection: "tcp(156.143.17.176)",
 			DBName:     "jcovington",
@@ -40,7 +42,8 @@ func main() {
 			DBUser:     "lg4zljacvp2tkm4x",
 			DBPass:     "clh3e6aww7a0600o",
 		}
-		dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
+		//dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
+		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
 	}
 
 	//dsn := config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
