@@ -20,7 +20,7 @@ func main() {
 
 	err = godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Error loading .env file")
 	}
 
 	env := os.Getenv("ENVIRONMENT")
@@ -48,6 +48,8 @@ func main() {
 	models.InitDB(dsn)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println("Exiting...")
+		return
 	}
 	router := cincObj.Gin
 	router.Run(":8000")
