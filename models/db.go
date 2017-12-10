@@ -10,7 +10,7 @@ import (
 var db *sql.DB
 
 // InitDB ..
-func InitDB(dsn string) {
+func InitDB(dsn string) error {
 	var err error
 	db, err = sql.Open("mysql", dsn)
 	if err != nil {
@@ -21,5 +21,7 @@ func InitDB(dsn string) {
 	err = db.Ping()
 	if err != nil {
 		fmt.Println("Pinging error!")
+		return err
 	}
+	return nil
 }

@@ -32,6 +32,7 @@ func main() {
 	port := os.Getenv("PORT")
 	log.Println(port)
 	var dsn string
+	var dsn2 string
 	if env == "dev" {
 		config := &cinc.DBConfig{
 			Connection: "tcp(156.143.17.176)",
@@ -49,11 +50,20 @@ func main() {
 		// }
 		//dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
 		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/ekrazwe0spgirfvb"
+		dsn2 = "mysql://lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
 	}
 
 	//dsn := config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
 	log.Println("DSN string being used: " + dsn)
-	models.InitDB(dsn)
+
+	err = models.InitDB(dsn)
+	if err != nil {
+		err2 := models.InitDB(dsn2)
+		if err2 != nil {
+			log.Println("Another pinging error!")
+		}
+	}
+
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Exiting...")
