@@ -60,6 +60,6 @@ func main() {
 		return
 	}
 	router := cincObj.Gin
-	router.Run(port)
+	router.Run(":" + port)
 	fmt.Printf("Now running on port: " + port)
 }
