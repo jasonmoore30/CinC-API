@@ -7,15 +7,19 @@ import (
 
 //Experience ..
 type Experience struct {
-	ID          int    `db:"expID" json:"id"`
-	Type        string `db:"expType" json:"type"`
-	Description string `db:"expPost" json:"desc"`
-	ImgURL      string `db:"expImg" json:"url"`
+	ID          int    `json:"id"`
+	FirstName   string `json:"firstname"`
+	LastName    string `json:"lastname"`
+	Email       string `json:"email"`
+	Type        string `json:"type"`
+	Description string `json:"desc"`
+	ImgURL      string `json:"url"`
+	Approved    int    `json:"approved"`
 }
 
 //GetExperiences ..
 func GetExperiences() ([]*Experience, error) {
-	stmt, err := db.Prepare("SELECT * FROM furmexp")
+	stmt, err := db.Prepare("SELECT * FROM furmexp WHERE adApproval <>0")
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +32,7 @@ func GetExperiences() ([]*Experience, error) {
 	experiences := make([]*Experience, 0)
 	for rows.Next() {
 		exp := new(Experience)
-		err := rows.Scan(&exp.ID, &exp.Type, &exp.Description, &exp.ImgURL)
+		err := rows.Scan(&exp.ID, &exp.FirstName, &exp.LastName, &exp.Email, &exp.Type, &exp.Description, &exp.ImgURL, &exp.Approved)
 		if err != nil {
 			return nil, err
 		}
@@ -40,13 +44,13 @@ func GetExperiences() ([]*Experience, error) {
 
 //GetExperience ..
 func GetExperience(id string) (*Experience, error) {
-	row, err := db.Query("SELECT * FROM furmexp WHERE expID=?")
+	row, err := db.Query("SELECT * FROM furmexp WHERE expID=?", id)
 	if err != nil {
 		return nil, err
 	}
 	var exp = new(Experience)
 	for row.Next() {
-		err = row.Scan(&exp.ID, &exp.Type, &exp.Description, &exp.ImgURL)
+		err = row.Scan(&exp.ID, &exp.FirstName, &exp.LastName, &exp.Email, &exp.Type, &exp.Description, &exp.ImgURL, &exp.Approved)
 		if err != nil {
 			return nil, err
 		}
@@ -60,7 +64,7 @@ func GetExperience(id string) (*Experience, error) {
 
 //AddExperience ..
 func AddExperience(myExperience *Experience) error {
-	stmt, err := db.Prepare("INSERT INTO furmexp (expType, expPost, expImg) VALUES (?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmexp (fName, lName, email, expType, expPost, expImg, adApproval) VALUES (?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -69,7 +73,7 @@ func AddExperience(myExperience *Experience) error {
 	if !ok {
 		return nil
 	}
-	result, err := stmt.Exec(myExperience.Type, myExperience.Description, myExperience.ImgURL)
+	result, err := stmt.Exec(myExperience.FirstName, myExperience.LastName, myExperience.Email, myExperience.Type, myExperience.Description, myExperience.ImgURL, 0)
 	if err != nil {
 		return err
 	}
@@ -98,11 +102,11 @@ func DeleteExperience(id string) error {
 //UpdateExperience ..
 func UpdateExperience(myExperience *Experience, id string) error {
 
-	stmt, err := db.Prepare("UPDATE furmexp SET expType=?, expPost=?, expImg=? WHERE expID=?")
+	stmt, err := db.Prepare("UPDATE furmexp SET fName=?, lName=?, email=?, expType=?, expPost=?, expImg=?, adApproval=? WHERE expID=?")
 	if err != nil {
 		return err
 	}
-	result, err := stmt.Exec(myExperience.Type, myExperience.Description, myExperience.ImgURL, id)
+	result, err := stmt.Exec(myExperience.FirstName, myExperience.LastName, myExperience.Email, myExperience.Type, myExperience.Description, myExperience.ImgURL, myExperience.Approved, id)
 	if err != nil {
 		return err
 	}
