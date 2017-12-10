@@ -16,7 +16,7 @@ type Post struct {
 
 //GetPosts ..
 func GetPosts() ([]*Post, error) {
-	stmt, err := db.Prepare("SELECT * FROM furmpost,furminf")
+	stmt, err := db.Prepare("SELECT furmpost.title, furmpost.body, furmpost.postDT, furminf.user, furminf.fName, furminf.lName, furminf.uEmail FROM furmpost INNER JOIN furminf ON furmpost.usernum=furminf.usernum")
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func GetPosts() ([]*Post, error) {
 
 //GetPost ..
 func GetPost(id string) (*Post, error) {
-	row, err := db.Query("SELECT * FROM furmpost WHERE entryID=?", id)
+	row, err := db.Query("SELECT furmpost.title, furmpost.body, furmpost.postDT, furminf.user, furminf.fName, furminf.lName, furminf.uEmail FROM furmpost WHERE evID=? INNER JOIN furminf ON furmcal.usernum=furminf.usernum", id)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func DeletePost(id string) error {
 
 //UpdatePost ..
 func UpdatePost(myPost *Post, id string) error {
-	stmt, err := db.Prepare("UPDATE furmpost SET title=?, body=? WHERE entryID=?")
+	stmt, err := db.Prepare("UPDATE furmpost SET (title=?, body=? WHERE entryID=?")
 
 	result, err := stmt.Exec(myPost.Title, myPost.Body)
 	if err != nil {
