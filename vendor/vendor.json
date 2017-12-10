@@ -8,6 +8,10 @@
 	"ignore": "test",
 	"package": [
 		{
+			"path": "appengine/cloudsql",
+			"revision": ""
+		},
+		{
 			"checksumSHA1": "QeKwBtN2df+j+4stw3bQJ6yO4EY=",
 			"path": "github.com/gin-contrib/sse",
 			"revision": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae",
@@ -38,10 +42,10 @@
 			"revisionTime": "2017-10-23T09:14:09Z"
 		},
 		{
-			"checksumSHA1": "os4jdoOUjr86qvOwri8Ut1rXDrg=",
+			"checksumSHA1": "Z6rD6bmF8InGLXM7EHr8TMxMXNY=",
 			"path": "github.com/go-sql-driver/mysql",
-			"revision": "fade21009797158e7b79e04c340118a9220c6f9e",
-			"revisionTime": "2017-10-17T18:16:16Z"
+			"revision": "9181e3a86a19bacd63e68d43ae8b7b36320d8092",
+			"revisionTime": "2017-12-04T00:43:26Z"
 		},
 		{
 			"checksumSHA1": "yqF125xVSkmfLpIVGrLlfE05IUk=",
@@ -66,6 +70,12 @@
 			"path": "github.com/ugorji/go/codec",
 			"revision": "acb6ae458c7e13d349a39dad54bc5fa9b52de34c",
 			"revisionTime": "2017-10-24T11:30:37Z"
+		},
+		{
+			"checksumSHA1": "LiyXfqOzaeQ8vgYZH3t2hUEdVTw=",
+			"path": "google.golang.org/appengine/cloudsql",
+			"revision": "9d8544a6b2c7df9cff240fcf92d7b2f59bc13416",
+			"revisionTime": "2017-10-31T19:43:29Z"
 		},
 		{
 			"checksumSHA1": "P/k5ZGf0lEBgpKgkwy++F7K1PSg=",
