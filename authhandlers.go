@@ -13,6 +13,7 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	gin "github.com/gin-gonic/gin"
+
 	"github.com/jasonmoore30/CinC-API/models"
 	//uuid "github.com/satori/go.uuid"
 )
@@ -52,7 +53,7 @@ type AuthRes struct {
 func registerUser(c *gin.Context) {
 
 	var req RegisterUserReq
-
+	_ = c.BindJSON(&req)
 	var errs []ErrorRes
 	if req.Email == "" {
 		errs = append(errs, ErrorRes{Message: "Must include an email address"})
@@ -71,30 +72,27 @@ func registerUser(c *gin.Context) {
 	}
 	_, err := models.FindUser(req.Email) //models.findUser(email string)
 	if err != nil {
-		if err == models.ErrNoUserFound { //might need to remove this check
-			var cryptPass []byte
-			cryptPass, err = bcrypt.GenerateFromPassword([]byte(req.Password), 10)
-			if err != nil {
-				//writeResponse(w, http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
-				c.JSON(http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
-				return
-			}
-			err = models.AddUser(&models.User{ //models.addUser
-				Email:    req.Email,
-				Password: base64.StdEncoding.EncodeToString(cryptPass),
-				//Sites:    []string{req.SiteID},
-			})
-			if err != nil {
-				//writeResponse(w, http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
-				c.JSON(http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
-				return
-			}
-			//w.WriteHeader(http.StatusCreated)
-			c.AbortWithStatus(http.StatusCreated)
+		var cryptPass []byte
+		cryptPass, err = bcrypt.GenerateFromPassword([]byte(req.Password), 10)
+		log.Println("Encypting password")
+		if err != nil {
+			//writeResponse(w, http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
+			c.JSON(http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
-		return
+		err = models.AddUser(&models.User{ //models.addUser
+			Email:    req.Email,
+			Password: base64.StdEncoding.EncodeToString(cryptPass),
+			//Sites:    []string{req.SiteID},
+		})
+		log.Println("User added!")
+		if err != nil {
+			//writeResponse(w, http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
+			c.JSON(http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
+			return
+		}
+		//w.WriteHeader(http.StatusCreated)
+		c.AbortWithStatus(http.StatusCreated)
 	}
 	//writeResponse(w, http.StatusBadRequest, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: "Email is already registered"}}})
 	c.JSON(http.StatusBadRequest, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: "Email is already registered"}}})
@@ -125,11 +123,8 @@ func authUser(c *gin.Context) {
 
 	user, err := models.FindUser(req.Email) //models.findUser()
 	if err != nil {
-		if err == models.ErrNoUserFound {
-			c.AbortWithStatus(http.StatusUnauthorized)
-			return
-		}
-		c.JSON(http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
+		log.Println("Couldnt find user with that email")
+		c.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 	cryptPass, err := base64.StdEncoding.DecodeString(user.Password)
@@ -143,6 +138,7 @@ func authUser(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, nil)
 		return
 	}
+	fmt.Println("Able to correctly hash and compare passwords!")
 	token, err := models.GenerateUserToken(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, &ErrorsRes{Errors: []ErrorRes{ErrorRes{Message: err.Error()}}})
@@ -175,21 +171,22 @@ func publicKey(c *gin.Context) {
 func AuthToken(c *gin.Context) {
 	var claims models.CustomClaims
 	var parse jwt.Parser
+
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
-		c.Writer.WriteHeader(http.StatusUnauthorized)
+		c.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 	authPieces := strings.Split(authHeader, " ")
 	var rawToken string
 	if authPieces[0] != "Bearer" {
-		c.Writer.WriteHeader(http.StatusUnauthorized)
+		c.AbortWithStatus(http.StatusUnauthorized)
 		return
 	} else if authPieces[0] == "Bearer" {
 		rawToken = authPieces[1]
 	}
 
-	token, error := parse.ParseWithClaims(rawToken, &claims, func(_ *jwt.Token) (interface{}, error) {
+	token, err := parse.ParseWithClaims(rawToken, &claims, func(_ *jwt.Token) (interface{}, error) {
 
 		pubPem, err := models.GetPublicPem()
 		if err != nil {
@@ -199,13 +196,16 @@ func AuthToken(c *gin.Context) {
 		return x509.ParsePKIXPublicKey(pubBlock.Bytes)
 	})
 
-	if error != nil {
-		log.Println(error)
+	if err != nil {
+		log.Println(err)
 		c.Writer.WriteHeader(http.StatusUnauthorized)
 		return
 	}
+
 	if token.Valid {
+		fmt.Println("Middleware was called!")
 		c.Next()
+
 	} else {
 		c.Writer.WriteHeader(http.StatusUnauthorized)
 		return

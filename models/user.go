@@ -52,7 +52,7 @@ func FindUser(userEmail string) (*User, error) {
 	var blank string
 	for row.Next() {
 		//err = row.Scan(&event.ID, &event.Title, &event.Description, &event.Date, &event.Location, &event.Start, &event.End)
-		err = row.Scan(&blank, &user.Password, &blank, &blank, &user.Email, &blank, &user.ID)
+		err = row.Scan(&blank, &user.Password, &blank, &blank, &user.Email, &blank, &blank, &user.ID)
 		if err != nil {
 			return nil, err
 		}

@@ -43,7 +43,7 @@ func main() {
 		dsn = config.DBUser + ":" + config.DBPass + "@" + config.Connection + "/" + config.DBName
 	} else {
 		dsn = "lg4zljacvp2tkm4x:clh3e6aww7a0600o@tcp(erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com)/ekrazwe0spgirfvb"
-		dsn2 = "mysql://lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
+		//dsn2 = "mysql://lg4zljacvp2tkm4x:clh3e6aww7a0600o@erxv1bzckceve5lh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekrazwe0spgirfvb"
 	}
 
 	log.Println("DSN string being used: " + dsn)

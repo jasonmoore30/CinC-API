@@ -42,8 +42,44 @@
 			"revisionTime": "2017-12-08T22:09:07Z"
 		},
 		{
+			"checksumSHA1": "7/8j/q0TWtOgXyvEcv4B2Dhl00o=",
+			"path": "github.com/aws/aws-sdk-go/aws/corehandlers",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
 			"checksumSHA1": "Y+cPwQL0dZMyqp3wI+KJWmA9KQ8=",
 			"path": "github.com/aws/aws-sdk-go/aws/credentials",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "u3GOAJLmdvbuNUeUEcZSEAOeL/0=",
+			"path": "github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "NUJUTWlc1sV8b7WjfiYc4JZbXl0=",
+			"path": "github.com/aws/aws-sdk-go/aws/credentials/endpointcreds",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "JEYqmF83O5n5bHkupAzA6STm0no=",
+			"path": "github.com/aws/aws-sdk-go/aws/credentials/stscreds",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "ZdtYh3ZHSgP/WEIaqwJHTEhpkbs=",
+			"path": "github.com/aws/aws-sdk-go/aws/defaults",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "/EXbk/z2TWjWc1Hvb4QYs3Wmhb8=",
+			"path": "github.com/aws/aws-sdk-go/aws/ec2metadata",
 			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
 			"revisionTime": "2017-12-08T22:09:07Z"
 		},
@@ -56,6 +92,12 @@
 		{
 			"checksumSHA1": "9GvAyILJ7g+VUg8Ef5DsT5GuYsg=",
 			"path": "github.com/aws/aws-sdk-go/aws/request",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "HcGL4e6Uep4/80eCUI5xkcWjpQ0=",
+			"path": "github.com/aws/aws-sdk-go/aws/session",
 			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
 			"revisionTime": "2017-12-08T22:09:07Z"
 		},
@@ -74,6 +116,18 @@
 		{
 			"checksumSHA1": "NStHCXEvYqG72GknZyv1jaKaeH0=",
 			"path": "github.com/aws/aws-sdk-go/private/protocol",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "yHfT5DTbeCLs4NE2Rgnqrhe15ls=",
+			"path": "github.com/aws/aws-sdk-go/private/protocol/json/jsonutil",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "R00RL5jJXRYq1iiK1+PGvMfvXyM=",
+			"path": "github.com/aws/aws-sdk-go/private/protocol/jsonrpc",
 			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
 			"revisionTime": "2017-12-08T22:09:07Z"
 		},
@@ -108,8 +162,38 @@
 			"revisionTime": "2017-12-08T22:09:07Z"
 		},
 		{
+			"checksumSHA1": "oAFLgD0uJiVOZkFkL5dd/wUgBz4=",
+			"path": "github.com/aws/aws-sdk-go/service/kms",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "OjnnN9JobHmJLZvIBM0du3bNLmk=",
+			"path": "github.com/aws/aws-sdk-go/service/kms/kmsiface",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
 			"checksumSHA1": "sCaHoPWsJXRHFbilUKwN71qFTOI=",
 			"path": "github.com/aws/aws-sdk-go/service/s3",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "Lc15MfTPlIbXH9uWEkv9ch3GM4k=",
+			"path": "github.com/aws/aws-sdk-go/service/s3/s3crypto",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "ZP6QI0X9BNKk8o1p3AyLfjabS20=",
+			"path": "github.com/aws/aws-sdk-go/service/s3/s3iface",
+			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
+			"revisionTime": "2017-12-08T22:09:07Z"
+		},
+		{
+			"checksumSHA1": "W1oFtpaT4TWIIJrAvFcn/XdcT7g=",
+			"path": "github.com/aws/aws-sdk-go/service/sts",
 			"revision": "365b4d34369496e650e3056b33fce4e1a25cfc72",
 			"revisionTime": "2017-12-08T22:09:07Z"
 		},
@@ -220,6 +304,10 @@
 			"path": "gopkg.in/yaml.v2",
 			"revision": "eb3733d160e74a9c7e442f435eb3bea458e1d19f",
 			"revisionTime": "2017-08-12T16:00:11Z"
+		},
+		{
+			"path": "launchpad.net/goamz/s3",
+			"revision": ""
 		}
 	],
 	"rootPath": "github.com/jasonmoore30/CinC-API"
