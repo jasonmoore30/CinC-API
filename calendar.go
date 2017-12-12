@@ -21,7 +21,13 @@ import (
 
 // getEvents is our handler func to write a nice, accurate response or error message
 func getEvents(c *gin.Context) {
-	events, err := models.GetEvents()
+	events, err := models.GetEvents(false)
+	checkErr(err)
+	c.JSON(200, events)
+}
+
+func getEventsAdmin(c *gin.Context) {
+	events, err := models.GetEvents(true)
 	checkErr(err)
 	c.JSON(200, events)
 }
@@ -68,6 +74,14 @@ func updateEvent(c *gin.Context) {
 	checkErr(err)
 
 	c.AbortWithStatus(http.StatusOK)
+}
+
+func approveEvent(c *gin.Context) {
+	id := c.Params.ByName("id")
+	err := models.ApproveEvent(id)
+	checkErr(err)
+
+	c.AbortWithStatus(http.StatusAccepted)
 }
 
 func checkErr(err error) {

@@ -15,11 +15,20 @@ type Course struct {
 	Faculty         string `json:"faculty"`
 	Faculty2        string `json:"faculty2"`
 	CincDescription string `json:"cincComp"`
+	// Approved        int    `json:"approved"`
 }
 
 //GetCourses ..
-func GetCourses() ([]*Course, error) {
-	stmt, err := db.Prepare("SELECT * FROM furmcourse")
+func GetCourses(admin bool) ([]*Course, error) {
+
+	query := ""
+	if admin {
+		query = "SELECT * FROM furmcourse WHERE adApproval=0"
+	} else {
+		query = "SELECT * FROM furmcourse WHERE adApproval <>0"
+	}
+
+	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -29,10 +38,11 @@ func GetCourses() ([]*Course, error) {
 	}
 	defer rows.Close()
 
+	var blank int
 	courses := make([]*Course, 0)
 	for rows.Next() {
 		course := new(Course)
-		err := rows.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
+		err := rows.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -48,9 +58,10 @@ func GetCourse(id string) (*Course, error) {
 	if err != nil {
 		return nil, err
 	}
+	var blank int
 	var course = new(Course)
 	for row.Next() {
-		err = row.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription)
+		err = row.Scan(&course.ID, &course.Title, &course.Department, &course.Department2, &course.Description, &course.Faculty, &course.Faculty2, &course.CincDescription, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +76,7 @@ func GetCourse(id string) (*Course, error) {
 //AddCourse ..
 func AddCourse(myCourse *Course) error {
 
-	stmt, err := db.Prepare("INSERT INTO furmcourse (title, dept, dept2, description, faculty, faculty2, cinc_description) VALUES (?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmcourse (title, dept, dept2, description, faculty, faculty2, cinc_description, adApproval) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -73,7 +84,7 @@ func AddCourse(myCourse *Course) error {
 	if !ok {
 		//return custom error message about validity of submitted struct
 	}
-	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2, myCourse.CincDescription)
+	result, err := stmt.Exec(myCourse.Title, myCourse.Department, myCourse.Department2, myCourse.Description, myCourse.Faculty, myCourse.Faculty2, myCourse.CincDescription, 0)
 	if err != nil {
 		return err
 	}
@@ -114,6 +125,15 @@ func UpdateCourse(myCourse *Course, id string) error {
 		return err
 	}
 	fmt.Println("Course updated: ", rowNum)
+	return nil
+}
+
+//ApproveCourse sets the adApproval to true for the specified course
+func ApproveCourse(id string) error {
+	_, err := db.Query("UPDATE furmcourse SET adApproval=? WHERE cID=?", 1, id)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

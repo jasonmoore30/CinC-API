@@ -12,11 +12,20 @@ type Post struct {
 	PostDate string `json:"post_date"`
 	UserNum  int    `json:"usernum"`
 	ID       int    `json:"id"`
+	// Approved int    `json:"approved"`
 }
 
 //GetPosts ..
-func GetPosts() ([]*Post, error) {
-	stmt, err := db.Prepare("SELECT * FROM furmpost")
+func GetPosts(admin bool) ([]*Post, error) {
+
+	query := ""
+	if admin {
+		query = "SELECT * FROM furmpost WHERE adApproval=0"
+	} else {
+		query = "SELECT * FROM furmpost WHERE adApproval <>0"
+	}
+
+	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -26,10 +35,11 @@ func GetPosts() ([]*Post, error) {
 	}
 	defer rows.Close()
 
+	var blank int
 	posts := make([]*Post, 0)
 	for rows.Next() {
 		post := new(Post)
-		err := rows.Scan(&post.Title, &post.Body, &post.PostDate, &post.UserNum, &post.ID)
+		err := rows.Scan(&post.Title, &post.Body, &post.PostDate, &post.UserNum, &post.ID, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -45,9 +55,10 @@ func GetPost(id string) (*Post, error) {
 	if err != nil {
 		return nil, err
 	}
+	var blank int
 	var post = new(Post)
 	for row.Next() {
-		err = row.Scan(&post.Title, &post.Body, &post.PostDate, &post.UserNum, &post.ID)
+		err = row.Scan(&post.Title, &post.Body, &post.PostDate, &post.UserNum, &post.ID, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -62,7 +73,7 @@ func GetPost(id string) (*Post, error) {
 //AddPost ..
 func AddPost(myPost *Post) error {
 
-	stmt, err := db.Prepare("INSERT INTO furmpost (title, body, usernum) VALUES (?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmpost (title, body, usernum adApproval) VALUES (?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -73,7 +84,7 @@ func AddPost(myPost *Post) error {
 	//result, err := stmt.Exec(myPost.Title, myPost.Body, myPost.PostDate, myPost.UserNum)
 	//Usernum? Pretty sure we decided on a stateless site, we would need a screenname/email field
 	//instead of usernum
-	result, err := stmt.Exec(myPost.Title, myPost.Body, myPost.UserNum)
+	result, err := stmt.Exec(myPost.Title, myPost.Body, myPost.UserNum, 0)
 	if err != nil {
 		return err
 	}
@@ -113,6 +124,17 @@ func UpdatePost(myPost *Post, id string) error {
 	fmt.Println("Posts updated: ", rowNum)
 	return nil
 }
+
+//ApprovePost sets adApproval to true for the specified post
+func ApprovePost(id string) error {
+	_, err := db.Query("UPDATE furmpost SET adApproval=? WHERE entryID=?", 1, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//func GetUnapprovedPosts() ([]*Post, error) {}
 
 func (post *Post) validate() bool {
 	return true

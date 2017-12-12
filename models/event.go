@@ -11,21 +11,24 @@ type Event struct {
 	Title       string `db:"title" json:"title"`
 	CreatorID   int    `db:"creator" json:"creatorid"`
 	Description string `db:"description" json:"description"`
-	//Date        string `db:"date" json:"date"`
-	Location  string `db:"location" json:"location"`
-	Start     string `db:"start_time" json:"start_time"`
-	End       string `db:"end_time" json:"end_time"`
-	CreatedAt string `db:"created_at" json:"created_at"`
+	Location    string `db:"location" json:"location"`
+	Start       string `db:"start_time" json:"start_time"`
+	End         string `db:"end_time" json:"end_time"`
+	CreatedAt   string `db:"created_at" json:"created_at"`
+	// Approved    int    `json:"approved"`
 }
 
 //GetEvents returns an array of all the event objects in the database
-func GetEvents() ([]*Event, error) {
-	// err := db.Ping()
-	// if err != nil {
-	// 	return nil, err
-	// }
+func GetEvents(admin bool) ([]*Event, error) {
 
-	stmt, err := db.Prepare("SELECT * FROM furmcal")
+	query := ""
+	if admin {
+		query = "SELECT * FROM furmcal WHERE adApproval=0"
+	} else {
+		query = "SELECT * FROM furmcal WHERE adApproval <>0"
+	}
+
+	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -36,9 +39,10 @@ func GetEvents() ([]*Event, error) {
 	defer rows.Close()
 
 	events := make([]*Event, 0)
+	var blank int
 	for rows.Next() {
 		event := new(Event)
-		err := rows.Scan(&event.ID, &event.CreatorID, &event.Start, &event.End, &event.CreatedAt, &event.Title, &event.Description, &event.Location)
+		err := rows.Scan(&event.ID, &event.CreatorID, &event.Start, &event.End, &event.CreatedAt, &event.Title, &event.Description, &event.Location, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -55,10 +59,11 @@ func GetEvent(id string) (*Event, error) {
 	if err != nil {
 		return nil, err
 	}
+	var blank int
 	var event = new(Event)
 	for row.Next() {
 		//err = row.Scan(&event.ID, &event.Title, &event.Description, &event.Date, &event.Location, &event.Start, &event.End)
-		err = row.Scan(&event.ID, &event.CreatorID, &event.Start, &event.End, &event.CreatedAt, &event.Title, &event.Description, &event.Location)
+		err = row.Scan(&event.ID, &event.CreatorID, &event.Start, &event.End, &event.CreatedAt, &event.Title, &event.Description, &event.Location, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -73,7 +78,7 @@ func GetEvent(id string) (*Event, error) {
 //AddEvent inserts a new event into the Events table
 func AddEvent(myEvent *Event) error {
 
-	stmt, err := db.Prepare("INSERT INTO furmcal (evTitle, evDesc, evLoc, evStart, evEnd, usernum) VALUES (?, ?, ?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO furmcal (evTitle, evDesc, evLoc, evStart, evEnd, usernum, adApproval) VALUES (?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -89,7 +94,7 @@ func AddEvent(myEvent *Event) error {
 	}
 
 	//We may need to convert the start and end time strings into
-	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Location, myEvent.Start, myEvent.End, 2)
+	result, err := stmt.Exec(myEvent.Title, myEvent.Description, myEvent.Location, myEvent.Start, myEvent.End, 2, 0)
 	if err != nil {
 		return err
 	}
@@ -131,6 +136,15 @@ func UpdateEvent(myEvent *Event, id string) error {
 		return err
 	}
 	fmt.Println("Event updated: ", rowNum)
+	return nil
+}
+
+//ApproveEvent sets the adApproval to true for the specified event
+func ApproveEvent(id string) error {
+	_, err := db.Query("UPDATE furmcal SET adApproval=? WHERE evID=?", 1, id)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

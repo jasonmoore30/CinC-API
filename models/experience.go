@@ -14,12 +14,20 @@ type Experience struct {
 	Type        string `json:"type"`
 	Description string `json:"desc"`
 	ImgURL      string `json:"url"`
-	Approved    int    `json:"approved"`
+	// Approved    int    `json:"approved"`
 }
 
 //GetExperiences ..
-func GetExperiences() ([]*Experience, error) {
-	stmt, err := db.Prepare("SELECT * FROM furmexp WHERE adApproval <>0")
+func GetExperiences(admin bool) ([]*Experience, error) {
+
+	query := ""
+	if admin {
+		query = "SELECT * FROM furmexp WHERE adApproval=0"
+	} else {
+		query = "SELECT * FROM furmexp WHERE adApproval <>0"
+	}
+
+	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -28,11 +36,11 @@ func GetExperiences() ([]*Experience, error) {
 		return nil, err
 	}
 	defer rows.Close()
-
+	var blank int
 	experiences := make([]*Experience, 0)
 	for rows.Next() {
 		exp := new(Experience)
-		err := rows.Scan(&exp.ID, &exp.FirstName, &exp.LastName, &exp.Email, &exp.Type, &exp.Description, &exp.ImgURL, &exp.Approved)
+		err := rows.Scan(&exp.ID, &exp.FirstName, &exp.LastName, &exp.Email, &exp.Type, &exp.Description, &exp.ImgURL, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -48,9 +56,10 @@ func GetExperience(id string) (*Experience, error) {
 	if err != nil {
 		return nil, err
 	}
+	var blank int
 	var exp = new(Experience)
 	for row.Next() {
-		err = row.Scan(&exp.ID, &exp.FirstName, &exp.LastName, &exp.Email, &exp.Type, &exp.Description, &exp.ImgURL, &exp.Approved)
+		err = row.Scan(&exp.ID, &exp.FirstName, &exp.LastName, &exp.Email, &exp.Type, &exp.Description, &exp.ImgURL, &blank)
 		if err != nil {
 			return nil, err
 		}
@@ -102,11 +111,11 @@ func DeleteExperience(id string) error {
 //UpdateExperience ..
 func UpdateExperience(myExperience *Experience, id string) error {
 
-	stmt, err := db.Prepare("UPDATE furmexp SET fName=?, lName=?, email=?, expType=?, expPost=?, expImg=?, adApproval=? WHERE expID=?")
+	stmt, err := db.Prepare("UPDATE furmexp SET fName=?, lName=?, email=?, expType=?, expPost=?, expImg=? WHERE expID=?")
 	if err != nil {
 		return err
 	}
-	result, err := stmt.Exec(myExperience.FirstName, myExperience.LastName, myExperience.Email, myExperience.Type, myExperience.Description, myExperience.ImgURL, myExperience.Approved, id)
+	result, err := stmt.Exec(myExperience.FirstName, myExperience.LastName, myExperience.Email, myExperience.Type, myExperience.Description, myExperience.ImgURL, id)
 	if err != nil {
 		return err
 	}
@@ -116,6 +125,15 @@ func UpdateExperience(myExperience *Experience, id string) error {
 	}
 	fmt.Println("Experience updated: ", rowNum)
 
+	return nil
+}
+
+//ApproveExperience sets the adApproval to true for the specified experience
+func ApproveExperience(id string) error {
+	_, err := db.Query("UPDATE furmexp SET adApproval=? WHERE expID=?", 1, id)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

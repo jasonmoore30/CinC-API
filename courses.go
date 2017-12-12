@@ -8,7 +8,13 @@ import (
 )
 
 func getCourses(c *gin.Context) {
-	courses, err := models.GetCourses()
+	courses, err := models.GetCourses(false)
+	checkErr(err)
+	c.JSON(200, courses)
+}
+
+func getCoursesAdmin(c *gin.Context) {
+	courses, err := models.GetCourses(true)
 	checkErr(err)
 	c.JSON(200, courses)
 }
@@ -53,4 +59,12 @@ func updateCourse(c *gin.Context) {
 	checkErr(err)
 
 	c.AbortWithStatus(http.StatusOK)
+}
+
+func approveCourse(c *gin.Context) {
+	id := c.Params.ByName("id")
+	err := models.ApproveCourse(id)
+	checkErr(err)
+
+	c.AbortWithStatus(http.StatusAccepted)
 }
