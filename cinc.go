@@ -115,7 +115,7 @@ func NewCinc() (*Cinc, error) {
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println("Error with RSA read/gen")
-		return nil, err
+		//return nil, err
 	}
 	if myKey == nil {
 		fmt.Println("THE DAMN KEY IS EMPTY")
@@ -138,8 +138,8 @@ func generateRSA() (*rsa.PrivateKey, error) {
 
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Println("Could not load env file")
-		return nil, err
+		log.Println("Could not load env file. Defaulting to config vars.")
+		//return nil, err
 	}
 
 	mySession, err := session.NewSession(&aws.Config{Region: aws.String("us-east-1")})

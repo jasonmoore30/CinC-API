@@ -88,8 +88,8 @@ func GetPublicPem() ([]byte, error) {
 
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Println("Could not load env file")
-		return nil, err
+		log.Println("Could not load env file. Defaulting to config vars?")
+		//return nil, err
 	}
 
 	mySession, err := session.NewSession(&aws.Config{Region: aws.String("us-east-1")})
