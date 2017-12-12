@@ -107,7 +107,7 @@ func GetPublicPem() ([]byte, error) {
 
 	var privKey = make([]byte, 1675)
 
-	n, err := result.Body.Read(privKey)
+	_, err = result.Body.Read(privKey)
 	//fmt.Println("Raw Bytes: ", privKey)
 	if err != nil {
 		//log.Println("Error reading the bytes from S3 in GetPublicPem. Read ", n, " bytes before failure")
