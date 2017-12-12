@@ -110,7 +110,7 @@ func GetPublicPem() ([]byte, error) {
 	n, err := result.Body.Read(privKey)
 	//fmt.Println("Raw Bytes: ", privKey)
 	if err != nil {
-		log.Println("Error reading the bytes from S3 in GetPublicPem. Read ", n, " bytes before failure")
+		//log.Println("Error reading the bytes from S3 in GetPublicPem. Read ", n, " bytes before failure")
 	}
 
 	pemBlock, rest := pem.Decode(privKey)

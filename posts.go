@@ -8,7 +8,13 @@ import (
 )
 
 func getPosts(c *gin.Context) {
-	posts, err := models.GetPosts()
+	posts, err := models.GetPosts(false)
+	checkErr(err)
+	c.JSON(200, posts)
+}
+
+func getPostsAdmin(c *gin.Context) {
+	posts, err := models.GetPosts(true)
 	checkErr(err)
 	c.JSON(200, posts)
 }
@@ -52,4 +58,12 @@ func updatePost(c *gin.Context) {
 	checkErr(err)
 
 	c.AbortWithStatus(http.StatusOK)
+}
+
+func approvePost(c *gin.Context) {
+	id := c.Params.ByName("id")
+	err := models.ApprovePost(id)
+	checkErr(err)
+
+	c.AbortWithStatus(http.StatusAccepted)
 }

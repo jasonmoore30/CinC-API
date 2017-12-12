@@ -63,6 +63,8 @@ func NewCinc() (*Cinc, error) {
 	// router.PUT("/api/calendar/events/update/:id", updateEvent)
 	auth.DELETE("/api/calendar/events/delete/:id", deleteEvent)
 	auth.PUT("/api/calendar/events/update/:id", updateEvent)
+	auth.PUT("/api/calendar/events/approve/:id", approveEvent)
+	auth.GET("/api/calendar/unapproved", getEventsAdmin)
 
 	//Courses CRUD
 	router.GET("/api/courses", getCourses)
@@ -72,6 +74,8 @@ func NewCinc() (*Cinc, error) {
 	// router.PUT("/api/courses/update/:id", updateCourse)
 	auth.DELETE("/api/courses/delete/:id", deleteCourse)
 	auth.PUT("/api/courses/update/:id", updateCourse)
+	auth.PUT("/api/courses/approve/:id", approveCourse)
+	auth.GET("/api/unapproved/courses", getCoursesAdmin)
 
 	//Experiences CRUD
 	router.GET("/api/experiences", getExperiences)
@@ -81,6 +85,8 @@ func NewCinc() (*Cinc, error) {
 	// router.PUT("/api/experiences/update/:id", updateExperience)
 	auth.DELETE("/api/experiences/delete/:id", deleteExperience)
 	auth.PUT("/api/experiences/update/:id", updateExperience)
+	auth.PUT("/api/experiences/approve/:id", approveExperience)
+	auth.GET("/api/unapproved/experiences", getExperiencesAdmin)
 
 	//Blog CRUD
 	router.GET("/api/blog/posts", getPosts)
@@ -90,6 +96,8 @@ func NewCinc() (*Cinc, error) {
 	// router.PUT("/api/blog/posts/update/:id", updatePost)
 	auth.DELETE("/api/blog/posts/delete/:id", deletePost)
 	auth.PUT("/api/blog/posts/update/:id", updatePost)
+	auth.PUT("/api/blog/posts/approve/:id", approvePost)
+	auth.GET("/api/blog/unapproved/posts", getPostsAdmin)
 
 	//Authentication
 

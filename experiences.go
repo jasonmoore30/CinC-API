@@ -8,7 +8,12 @@ import (
 )
 
 func getExperiences(c *gin.Context) {
-	experiences, err := models.GetExperiences()
+	experiences, err := models.GetExperiences(false)
+	checkErr(err)
+	c.JSON(200, experiences)
+}
+func getExperiencesAdmin(c *gin.Context) {
+	experiences, err := models.GetExperiences(true)
 	checkErr(err)
 	c.JSON(200, experiences)
 }
@@ -52,4 +57,12 @@ func updateExperience(c *gin.Context) {
 	checkErr(err)
 
 	c.AbortWithStatus(http.StatusOK)
+}
+
+func approveExperience(c *gin.Context) {
+	id := c.Params.ByName("id")
+	err := models.ApproveExperience(id)
+	checkErr(err)
+
+	c.AbortWithStatus(http.StatusAccepted)
 }
